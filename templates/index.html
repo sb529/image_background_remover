@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Image Backgrounds Effortlessly</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+    <div class="main-container">
+        <h1>Remove background instantly</h1>
+        <p class="subtitle">Easily remove the background from your images, just in seconds.</p>
+
+        <div class="upload-section">
+            <div id="upload-box" class="upload-box">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <label for="file-upload" class="custom-file-upload">
+                        <span class="upload-btn">Upload image</span>
+                    </label>
+                    <input id="file-upload" type="file" name="file" accept="image/*" required>
+                    <p>or drop a file</p>
+                </form>
+            </div>
+            <div id="result" class="result" style="display: none;">
+                <img id="processed-image" src="" alt="Processed Image">
+                <div class="button-container">
+                    <button id="download-btn" class="action-btn">Download Image</button>
+                    <button id="new-upload-btn" class="action-btn">Upload New Image</button>
+                </div>
+            </div>
+            <div id="loading" class="loading" style="display: none;">Processing image...</div>
+            <div id="error" class="error" style="display: none;"></div>
+        </div>
+
+        <footer>
+            <p>By uploading an image, you agree to our <a href="#">Terms of Service</a>. For more information on how Remove Background uses your personal data, see our <a href="#">Privacy Policy</a>.</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript will be added here
+        document.getElementById('file-upload').addEventListener('change', handleFileUpload);
+
+document.getElementById('download-btn').addEventListener('click', downloadImage);
+document.getElementById('new-upload-btn').addEventListener('click', resetUpload);
+
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Show loading indicator
+        document.getElementById('upload-box').style.display = 'none';
+        document.getElementById('loading').style.display = 'flex';
+        document.getElementById('result').style.display = 'none';
+        document.getElementById('error').style.display = 'none';
+
+        axios.post('/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(function (response) {
+            // Hide loading indicator
+            document.getElementById('loading').style.display = 'none';
+            
+            // Show the processed image and buttons
+            document.getElementById('result').style.display = 'flex';
+            document.getElementById('processed-image').src = 'data:image/png;base64,' + response.data.image;
+            
+            // Ensure the image fits within the screen
+            const img = document.getElementById('processed-image');
+            img.onload = function() {
+                const aspectRatio = img.naturalWidth / img.naturalHeight;
+                const maxHeight = window.innerHeight * 0.6; // 60% of viewport height
+                const maxWidth = window.innerWidth * 0.8;  // 80% of viewport width
+                
+                if (img.height > maxHeight) {
+                    img.style.height = maxHeight + 'px';
+                    img.style.width = 'auto';
+                } else if (img.width > maxWidth) {
+                    img.style.width = maxWidth + 'px';
+                    img.style.height = 'auto';
+                }
+            }
+        })
+        .catch(function (error) {
+            // Hide loading indicator
+            document.getElementById('loading').style.display = 'none';
+            
+            // Show error message
+            document.getElementById('error').style.display = 'flex';
+            document.getElementById('error').textContent = 'An error occurred while processing the image. Please try again.';
+            
+            console.error('Error:', error);
+        });
+    }
+}
+
+function downloadImage() {
+    const img = document.getElementById('processed-image');
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.download = 'processed_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function resetUpload() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('upload-box').style.display = 'flex';
+            document.getElementById('file-upload').value = ''; // Clear the file input
+        }
+    </script>
+</body>
+</html>
