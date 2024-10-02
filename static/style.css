@@ -22,7 +22,7 @@ body {
 .main-container {
     text-align: center;
     padding: 50px;
-    max-width: 600px;
+    max-width: 900px; /* Increased from 600px to 900px */
     width: 100%;
     background-color: white;
     border-radius: 15px;
@@ -102,43 +102,61 @@ p {
 }
 
 /* Result Section */
+/* Result Section */
 .result {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-img#processed-image {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 10px;
+/* Increase spacing between the images */
+.image-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px; /* Add gap between images */
+    width: 100%;
     margin-bottom: 20px;
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+
+.side-by-side-image {
+    width: 350px; /* Increased image size to fit the larger container */
+    height: auto;
+    border-radius: 10px;
 }
 
-.action-btn {
+
+/* Download button is positioned below the processed image */
+.download-btn {
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
     border: none;
     border-radius: 25px;
     color: white;
+    background-color: #4CAF50; /* Make it a green button */
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
-#download-btn {
-    background-color: #4CAF50;
+/* Download button hover effect */
+.download-btn:hover {
+    background-color: #45a049;
 }
 
-#new-upload-btn {
-    background-color: #3498db;
+/* Center the "Upload New Image" button */
+.center-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
+
+
+.upload-btn {
+    margin-top: 10px;
+}
+
 
 /* Footer */
 footer {

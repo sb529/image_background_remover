@@ -23,12 +23,22 @@
                 </form>
             </div>
             <div id="result" class="result" style="display: none;">
-                <img id="processed-image" src="" alt="Processed Image">
-                <div class="button-container">
-                    <button id="download-btn" class="action-btn">Download Image</button>
-                    <button id="new-upload-btn" class="action-btn">Upload New Image</button>
+                <div class="image-container">
+                    <div>
+                        <h3>Original Image</h3>
+                        <img id="original-image" src="" alt="Original Image" class="side-by-side-image">
+                    </div>
+                    <div>
+                        <h3>Processed Image</h3>
+                        <img id="processed-image" src="" alt="Processed Image" class="side-by-side-image">
+                        <button id="download-btn" class="action-btn download-btn">Download Image</button>
+                    </div>
+                </div>
+                <div class="center-button-container">
+                    <button id="new-upload-btn" class="action-btn upload-btn">Upload New Image</button>
                 </div>
             </div>
+                        
             <div id="loading" class="loading" style="display: none;">Processing image...</div>
             <div id="error" class="error" style="display: none;"></div>
         </div>
@@ -56,6 +66,10 @@ function handleFileUpload(event) {
         document.getElementById('loading').style.display = 'flex';
         document.getElementById('result').style.display = 'none';
         document.getElementById('error').style.display = 'none';
+
+        // Show the original image
+        const originalImageURL = URL.createObjectURL(file);
+        document.getElementById('original-image').src = originalImageURL;
 
         axios.post('/upload', formData, {
             headers: {
@@ -98,6 +112,7 @@ function handleFileUpload(event) {
         });
     }
 }
+
 
 function downloadImage() {
     const img = document.getElementById('processed-image');

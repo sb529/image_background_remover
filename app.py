@@ -35,11 +35,16 @@ def upload_image():
         input_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(input_path)
         
-        # Open the image and remove the background
+        # Resize the image to a smaller size to reduce processing time
+        img = Image.open(input_path)
+        img.thumbnail((800, 800))  # Resize the image to max 800x800 to reduce processing time
+        img.save(input_path)
+
+        # Open the resized image and remove the background using the default 'u2net' model
         with open(input_path, 'rb') as i:
             input_image = i.read()
         
-        output_image = remove(input_image)
+        output_image = remove(input_image)  # Use the default 'u2net' model
         
         # Save the processed image
         img = Image.open(io.BytesIO(output_image))
